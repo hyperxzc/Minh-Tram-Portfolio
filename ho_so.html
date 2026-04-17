@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minh Trâm — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="HCMC1.png">
+<style>
+  :root {
+    --cream: #FAF7F2;
+    --cream-dark: #F0EBE1;
+    --ink: #2C2420;
+    --ink-light: #6B5E58;
+    --ink-muted: #9C8E89;
+    --amber: #C4622D;
+    --amber-light: #E8956D;
+    --amber-bg: #FDF0E8;
+    --navy: #1F2D40;
+    --navy-light: #354D6B;
+    --white: #FFFFFF;
+    --border: rgba(44,36,32,0.12);
+    --border-soft: rgba(44,36,32,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Karla', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── CUSTOM CURSOR ── */
+  .cursor {
+    width: 8px; height: 8px;
+    background: var(--amber);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.15s, height 0.15s, background 0.15s;
+  }
+  .cursor-ring {
+    width: 32px; height: 32px;
+    border: 1px solid rgba(196,98,45,0.4);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.08s ease;
+  }
+  body:has(a:hover) .cursor,
+  body:has(button:hover) .cursor { width: 14px; height: 14px; background: var(--amber-light); }
+  body:has(a:hover) .cursor-ring,
+  body:has(button:hover) .cursor-ring { width: 44px; height: 44px; border-color: var(--amber); }
+
+  /* ── PROGRESS BAR ── */
+  #reading-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--amber), var(--amber-light));
+    z-index: 200;
+    width: 0%;
+    transition: width 0.1s;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 3rem;
+    height: 64px;
+    background: rgba(250,247,242,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-soft);
+    transition: background 0.3s;
+  }
+  nav.scrolled {
+    background: rgba(250,247,242,0.96);
+    box-shadow: 0 1px 20px rgba(44,36,32,0.06);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex; gap: 2rem; list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    text-decoration: none;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0; right: 100%;
+    height: 1px;
+    background: var(--amber);
+    transition: right 0.3s ease;
+  }
+  .nav-links a:hover::after { right: 0; }
+  .nav-links a:hover { color: var(--amber); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 8rem 3rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-image {
+    position: absolute;
+    top: 50%; right: -2%;
+    transform: translateY(-50%);
+    width: 55vw;
+    height: auto;
+    opacity: 0.06;
+    user-select: none;
+    pointer-events: none;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    filter: sepia(1) saturate(2) hue-rotate(-20deg);
+  }
+
+  /* Grain overlay */
+  #hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.4;
+  }
+
+  /* Floating orbs */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: float 8s ease-in-out infinite;
+  }
+  .orb-1 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(196,98,45,0.04) 0%, transparent 70%);
+    top: 10%; right: 20%;
+    animation-delay: 0s;
+  }
+  .orb-2 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(31,45,64,0.04) 0%, transparent 70%);
+    bottom: 20%; left: 10%;
+    animation-delay: -4s;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-20px) scale(1.05); }
+  }
+
+  .hero-inner {
+    max-width: 860px;
+    position: relative; z-index: 1;
+  }
+
+  .hero-eyebrow {
+    display: flex; align-items: center; gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .aquarius-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--amber-bg);
+    border: 1px solid rgba(196,98,45,0.2);
+    border-radius: 100px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--amber);
+    letter-spacing: 0.04em;
+  }
+
+  .dot-sep {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--ink-muted);
+  }
+
+  .hero-tag {
+    font-size: 13px;
+    color: var(--ink-muted);
+    letter-spacing: 0.04em;
+  }
+
+  h1.hero-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+  }
+  h1.hero-name em {
+    font-style: italic;
+    color: var(--amber);
+  }
+
+  /* Typewriter effect for hero */
+  .typewriter-wrapper {
+    display: inline;
+  }
+  .typewriter-text {
+    border-right: 2px solid var(--amber);
+    animation: blink 0.8s step-end infinite;
+  }
+  @keyframes blink {
+    0%, 100% { border-color: var(--amber); }
+    50% { border-color: transparent; }
+  }
+
+  .hero-desc {
+    font-size: 1.1rem;
+    color: var(--ink-light);
+    max-width: 540px;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-pills {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .pill {
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 12.5px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    transition: all 0.2s;
+  }
+  .pill-outline {
+    border: 1px solid var(--border);
+    color: var(--ink-light);
+    background: transparent;
+  }
+  .pill-outline:hover {
+    border-color: var(--amber);
+    color: var(--amber);
+    background: var(--amber-bg);
+  }
+  .pill-filled {
+    background: var(--navy);
+    color: rgba(255,255,255,0.9);
+    border: 1px solid var(--navy);
+  }
+
+  .hero-cta {
+    display: flex; gap: 1rem; align-items: center;
+  }
+
+  .btn-primary {
+    padding: 12px 28px;
+    background: var(--amber);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Karla', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: none;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 0; height: 0;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.4s, height 0.4s;
+  }
+  .btn-primary:hover::after { width: 200px; height: 200px; }
+  .btn-primary:hover { background: #B5572A; transform: translateY(-1px); }
+
+  .btn-ghost {
+    padding: 12px 28px;
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: 'Karla', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: none;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+
+  /* Scroll indicator */
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    opacity: 0;
+    animation: fadeUp 0.6s 1.2s ease forwards;
+  }
+  .scroll-line {
+    width: 40px;
+    height: 1px;
+    background: var(--ink-muted);
+    position: relative;
+    overflow: hidden;
+  }
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: var(--amber);
+    animation: scanline 2s ease-in-out infinite;
+  }
+  @keyframes scanline {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+
+  /* ── SECTION BASE ── */
+  section {
+    padding: 6rem 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .section-full {
+    max-width: none;
+    padding: 6rem 0;
+  }
+  .section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 3rem;
+  }
+
+  .section-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 1.25rem;
+  }
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 24px; height: 1px;
+    background: var(--amber);
+  }
+
+  h2.section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 1rem;
+  }
+  h2.section-title em { font-style: italic; color: var(--amber); }
+
+  .section-sub {
+    font-size: 1rem;
+    color: var(--ink-muted);
+    max-width: 520px;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border-soft);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ── ABOUT GRID ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .about-avatar {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: linear-gradient(145deg, #EDE8E0 0%, #D5C9BC 100%);
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .about-avatar::after {
+    content: 'ảnh của bạn';
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(44,36,32,0.3);
+  }
+  .about-avatar-frame {
+    position: absolute;
+    bottom: -1px; right: -1px;
+    width: 50%; height: 50%;
+    border-right: 2px solid var(--amber);
+    border-bottom: 2px solid var(--amber);
+  }
+
+  .about-contact {
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .contact-item {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px;
+    color: var(--ink-light);
+  }
+  .contact-icon {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--cream-dark);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .about-intro {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--ink);
+    margin-bottom: 2rem;
+    border-left: 3px solid var(--amber);
+    padding-left: 1.25rem;
+  }
+  .about-body {
+    font-size: 0.95rem;
+    color: var(--ink-light);
+    line-height: 1.9;
+    margin-bottom: 2rem;
+  }
+
+  .traits-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 2rem;
+  }
+  .trait-card {
+    padding: 1rem 1.25rem;
+    background: white;
+    border: 1px solid var(--border-soft);
+    border-radius: 4px;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: default;
+  }
+  .trait-card:hover {
+    border-color: var(--amber);
+    transform: translateY(-2px);
+  }
+  .trait-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 4px;
+  }
+  .trait-value {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  /* ── SKILLS ── */
+  .skills-section { margin-top: 2.5rem; }
+  .skills-heading {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 1rem;
+  }
+  .skill-group { margin-bottom: 1.75rem; }
+  .skill-group-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .skill-tag {
+    padding: 4px 14px;
+    font-size: 12.5px;
+    color: var(--ink-light);
+    background: var(--cream-dark);
+    border-radius: 2px;
+    transition: background 0.2s, color 0.2s;
+    cursor: default;
+  }
+  .skill-tag:hover { background: var(--amber-bg); color: var(--amber); }
+
+  .lang-row {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 10px;
+  }
+  .lang-name {
+    font-size: 13px;
+    color: var(--ink);
+    width: 80px;
+    flex-shrink: 0;
+  }
+  .lang-bar {
+    flex: 1;
+    height: 3px;
+    background: var(--cream-dark);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+  .lang-fill {
+    height: 100%;
+    background: var(--amber);
+    border-radius: 100px;
+    width: 0%;
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .lang-level {
+    font-size: 11px;
+    color: var(--ink-muted);
+    width: 80px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* ── STATS COUNTER ── */
+  .stats-strip {
+    background: var(--navy);
+    padding: 3rem;
+    margin: 0;
+  }
+  .stats-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    text-align: center;
+  }
+  .stat-item {}
+
+  .stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 300;
+    color: white; 
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .stat-number span { color: var(--amber-light); }
+  .stat-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+  }
+
+  /* ── JOURNEY ── */
+  #journey { background: white; }
+  .journey-layout {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 0;
+    margin-top: 3rem;
+  }
+  .journey-nav {
+    position: sticky;
+    top: 80px;
+    height: fit-content;
+    padding-right: 2rem;
+    border-right: 1px solid var(--border-soft);
+  }
+  .journey-nav-item {
+    display: block;
+    padding: 10px 0;
+    font-size: 13px;
+    color: var(--ink-muted);
+    text-decoration: none;
+    cursor: none;
+    transition: color 0.2s, padding-left 0.2s;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .journey-nav-item:last-child { border-bottom: none; }
+  .journey-nav-item:hover,
+  .journey-nav-item.active {
+    color: var(--amber);
+    padding-left: 6px;
+  }
+  .journey-content { padding-left: 3rem; }
+  .journey-block {
+    margin-bottom: 3.5rem;
+    padding-bottom: 3.5rem;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .journey-block:last-child { border-bottom: none; margin-bottom: 0; }
+  .journey-year {
+    font-family: 'Karla', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--amber);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .journey-block-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 0.25rem;
+    display: flex; align-items: baseline; gap: 0.75rem;
+  }
+  .journey-block-body {
+    font-size: 0.9rem;
+    color: var(--ink-light);
+    line-height: 1.9;
+    margin-bottom: 1.25rem;
+  }
+
+  .project-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+  }
+  .project-card {
+    padding: 1.25rem;
+    background: var(--cream);
+    border: 1px solid var(--border-soft);
+    border-radius: 4px;
+    transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+  }
+  .project-card:hover {
+    border-color: rgba(196,98,45,0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(196,98,45,0.08);
+  }
+  .project-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--amber);
+    background: var(--amber-bg);
+    border-radius: 2px;
+    padding: 3px 8px;
+    margin-bottom: 8px;
+  }
+  .project-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+  .project-desc {
+    font-size: 12.5px;
+    color: var(--ink-muted);
+    line-height: 1.7;
+  }
+
+  .club-list { display: flex; flex-wrap: wrap; gap: 10px; }
+  .club-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px;
+    background: var(--cream);
+    border: 1px solid var(--border-soft);
+    border-radius: 100px;
+    font-size: 13px;
+    color: var(--ink-light);
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .club-item:hover { border-color: var(--navy); background: var(--navy); color: white; }
+  .club-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--navy-light);
+    flex-shrink: 0;
+  }
+
+  .reflection-box {
+    background: var(--navy);
+    border-radius: 4px;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    margin-top: 1.5rem;
+  }
+  .reflection-box::before {
+    content: '\201C';
+    position: absolute;
+    top: -0.5rem; left: 1rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 8rem;
+    color: rgba(255,255,255,0.06);
+    line-height: 1;
+  }
+  .reflection-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.85);
+    position: relative; z-index: 1;
+  }
+
+  /* ── WORK ── */
+  .work-list { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 3rem; }
+  .work-card {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 2rem;
+    padding: 2rem;
+    background: white;
+    border: 1px solid var(--border-soft);
+    border-radius: 4px;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .work-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--amber);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.3s ease;
+  }
+  .work-card:hover::before { transform: scaleY(1); }
+  .work-card:hover {
+    border-color: rgba(196,98,45,0.25);
+    transform: translateX(4px);
+    box-shadow: 0 4px 20px rgba(196,98,45,0.06);
+  }
+  .work-period {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 6px;
+  }
+  .work-company {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--amber);
+  }
+  .work-role {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+  .work-type {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--navy-light);
+    background: rgba(31,45,64,0.06);
+    border-radius: 2px;
+    padding: 3px 10px;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.04em;
+  }
+  .work-desc {
+    font-size: 0.88rem;
+    color: var(--ink-light);
+    line-height: 1.85;
+    margin-bottom: 1rem;
+  }
+  .work-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .work-tag {
+    padding: 3px 12px;
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    background: var(--cream-dark);
+    border-radius: 100px;
+  }
+
+  /* ── INTERESTS SECTION (NEW) ── */
+  .interests-section {
+    padding: 6rem 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .interests-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .interest-card {
+    padding: 2rem;
+    background: white;
+    border: 1px solid var(--border-soft);
+    border-radius: 4px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .interest-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--amber), var(--amber-light));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+  .interest-card:hover::after { transform: scaleX(1); }
+  .interest-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(44,36,32,0.08); }
+  .interest-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+  .interest-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+  .interest-desc {
+    font-size: 0.875rem;
+    color: var(--ink-muted);
+    line-height: 1.7;
+  }
+
+  /* ── READING LIST (NEW) ── */
+  .books-section {
+    background: var(--cream-dark);
+    padding: 5rem 0;
+    overflow: hidden;
+  }
+  .books-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 3rem;
+  }
+  .books-marquee-wrapper {
+    overflow: hidden;
+    margin-top: 2rem;
+    mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+  }
+  .books-marquee {
+    display: flex;
+    gap: 1.5rem;
+    width: max-content;
+    animation: marquee 25s linear infinite;
+  }
+  .books-marquee:hover { animation-play-state: paused; }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .book-item {
+    padding: 1rem 1.5rem;
+    background: white;
+    border: 1px solid var(--border-soft);
+    border-radius: 4px;
+    white-space: nowrap;
+    font-size: 13px;
+    color: var(--ink-light);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: border-color 0.2s;
+    flex-shrink: 0;
+  }
+  .book-item:hover { border-color: var(--amber); }
+  .book-emoji { font-size: 16px; }
+  .book-title { font-weight: 500; color: var(--ink); }
+  .book-author { color: var(--ink-muted); }
+
+  /* ── CONTACT ── */
+  .contact-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+    position: relative;
+  }
+  .contact-cards::before {
+    content: '';
+    position: absolute;
+    top: -136px;
+    right: 20px;
+    width: 200px;
+    height: 200px;
+    background-image: url('chibi1.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .contact-card {
+    padding: 2rem;
+    background: white;
+    border: 1px solid var(--border-soft);
+    border-radius: 4px;
+    text-align: center;
+    transition: border-color 0.3s, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: inherit;
+  }
+  .contact-card:hover {
+    border-color: rgba(196,98,45,0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(196,98,45,0.12);
+  }
+  .contact-icon-large {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--amber-bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    margin-bottom: 1rem;
+    flex-shrink: 0;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .contact-card:hover .contact-icon-large {
+    background: var(--amber);
+    transform: scale(1.1);
+  }
+  .contact-card-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+  .contact-card-link {
+    font-size: 0.95rem;
+    color: var(--amber);
+    word-break: break-all;
+  }
+
+  /* ── AVAILABILITY BADGE (NEW) ── */
+  .availability-banner {
+    background: var(--amber-bg);
+    border: 1px solid rgba(196,98,45,0.2);
+    border-radius: 4px;
+    padding: 1.25rem 1.75rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    max-width: 540px;
+  }
+  .avail-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #4ade80;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(74,222,128,0.2);
+    animation: pulse-green 2s ease-in-out infinite;
+  }
+  @keyframes pulse-green {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(74,222,128,0.2); }
+    50% { box-shadow: 0 0 0 6px rgba(74,222,128,0.1); }
+  }
+  .avail-text {
+    font-size: 13.5px;
+    color: var(--ink-light);
+  }
+  .avail-text strong { color: var(--ink); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border-soft);
+    padding: 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .footer-left {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: var(--ink-light);
+  }
+  .footer-note {
+    font-size: 12px;
+    color: var(--ink-muted);
+  }
+  .back-to-top {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--cream-dark);
+    border: 1px solid var(--border-soft);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    cursor: none;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: var(--ink-light);
+  }
+  .back-to-top:hover { background: var(--amber); color: white; border-color: var(--amber); transform: translateY(-2px); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 0 1.5rem; }
+    nav .nav-links { display: none; }
+    section, .interests-section { padding: 4rem 1.5rem; }
+    #hero { padding: 6rem 1.5rem 3rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .about-avatar { aspect-ratio: 4/3; max-width: 280px; }
+    .journey-layout { grid-template-columns: 1fr; }
+    .journey-nav { display: none; }
+    .journey-content { padding-left: 0; }
+    .work-card { grid-template-columns: 1fr; gap: 0.5rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+    .traits-grid { grid-template-columns: 1fr; }
+    .hero-bg-image { display: none; }
+    .interests-grid { grid-template-columns: 1fr; }
+    .stats-inner { grid-template-columns: repeat(2, 1fr); }
+    body { cursor: auto; }
+    .cursor, .cursor-ring { display: none; }
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bounceIn {
+    0% { opacity: 0; transform: translateY(30px) scale(0.95); }
+    50% { opacity: 1; }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .hero-eyebrow { animation: fadeUp 0.6s ease forwards; }
+  h1.hero-name { animation: bounceIn 0.8s 0.15s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; opacity: 0; }
+  .hero-desc { animation: fadeUp 0.6s 0.3s ease forwards; opacity: 0; }
+  .hero-pills { animation: fadeUp 0.6s 0.4s ease forwards; opacity: 0; }
+  .hero-cta { animation: fadeUp 0.6s 0.5s ease forwards; opacity: 0; }
+
+  /* Scroll reveal base state */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- READING PROGRESS -->
+<div id="reading-progress"></div>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="#hero" class="nav-logo">Minh Trâm</a>
+  <ul class="nav-links">
+    <li><a href="#about">Về mình</a></li>
+    <li><a href="#journey">Hành trình ĐH</a></li>
+    <li><a href="#work">Kinh nghiệm</a></li>
+    <li><a href="#interests">Sở thích</a></li>
+    <li><a href="#contact">Liên hệ</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <img src="HCMC1.png" alt="" class="hero-bg-image" aria-hidden="true">
+
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <span class="aquarius-badge">♒ Bảo Bình · ENFP</span>
+      <span class="dot-sep"></span>
+      <span class="hero-tag">Quản trị kinh doanh &amp; Luật — ĐH Luật TP.HCM</span>
+    </div>
+
+    <h1 class="hero-name">
+      Xin chào,<br>
+      mình là <em>Minh Trâm</em>
+    </h1>
+
+    <p class="hero-desc">
+      Người hay đặt câu hỏi hơn là vội đưa ra câu trả lời. Thích hiểu vấn đề từ nhiều góc nhìn — giữa logic pháp lý và tư duy quản trị, mình tìm cách kết nối cả hai.
+    </p>
+
+    <div class="hero-pills">
+      <span class="pill pill-filled">Tư duy phản biện</span>
+      <span class="pill pill-outline">Quan sát &amp; Phân tích</span>
+      <span class="pill pill-outline">Ambivert</span>
+      <span class="pill pill-outline">Mối quan hệ an toàn &amp; chân thực</span>
+    </div>
+
+    <div class="hero-cta">
+      <a href="#journey" class="btn-primary">Hành trình của mình</a>
+      <a href="#work" class="btn-ghost">Kinh nghiệm thực tế</a>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    Cuộn xuống
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat-item reveal">
+      <div class="stat-number" data-target="5">0<span>+</span></div>
+      <div class="stat-label">Năm đại học</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-1">
+      <div class="stat-number" data-target="2">0<span> ngành</span></div>
+      <div class="stat-label">Song ngành</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-2">
+      <div class="stat-number" data-target="10">0<span>+</span></div>
+      <div class="stat-label">Dự án &amp; bài tập lớn</div>
+    </div>
+    <div class="stat-item reveal reveal-delay-3">
+      <div class="stat-number" data-target="3">0<span>+</span></div>
+      <div class="stat-label">CLB &amp; hoạt động</div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ABOUT -->
+<section id="about">
+  <span class="section-label">Về mình</span>
+  <div class="about-grid">
+    <div class="about-left reveal">
+      <div class="about-avatar">
+        <div class="about-avatar-frame"></div>
+      </div>
+      <div class="about-contact">
+        <div class="contact-item">
+          <div class="contact-icon">✉</div>
+          <span>email@example.com</span>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <span>TP. Hồ Chí Minh</span>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">in</div>
+          <span>LinkedIn của bạn</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-right reveal reveal-delay-1">
+      <blockquote class="about-intro">
+        "Mình không vội chọn một hướng đi cụ thể — vì mình tin rằng đôi khi, giữ nguyên sự tò mò là điều thông minh nhất."
+      </blockquote>
+
+      <p class="about-body">
+        Song ngành Quản trị kinh doanh và Luật không chỉ là quyết định học thuật với mình — đó là cách mình nhìn thế giới: không vội kết luận, hay hỏi "tại sao" và "nếu như". Mình thích những cuộc trò chuyện đi đến chiều sâu, những mối quan hệ xây trên sự tin tưởng thật sự, và những bài toán không có đáp án đơn giản.
+      </p>
+      <p class="about-body">
+        Là ambivert, mình biết khi nào cần lắng nghe và khi nào cần lên tiếng. Mình quan sát nhiều trước khi nói — nhưng khi đã nói, thường là có lý do.
+      </p>
+
+      <div class="traits-grid">
+        <div class="trait-card reveal reveal-delay-1">
+          <div class="trait-label">Cung hoàng đạo</div>
+          <div class="trait-value">♒ Bảo Bình</div>
+        </div>
+        <div class="trait-card reveal reveal-delay-2">
+          <div class="trait-label">MBTI</div>
+          <div class="trait-value">ENFP</div>
+        </div>
+        <div class="trait-card reveal reveal-delay-3">
+          <div class="trait-label">Điểm mạnh</div>
+          <div class="trait-value">Logic &amp; Phản biện</div>
+        </div>
+        <div class="trait-card reveal reveal-delay-4">
+          <div class="trait-label">Năng lượng</div>
+          <div class="trait-value">Ambivert</div>
+        </div>
+      </div>
+
+      <div class="skills-section">
+        <div class="skills-heading">Ngôn ngữ đang học</div>
+
+        <div class="lang-row">
+          <span class="lang-name">Tiếng Việt</span>
+          <div class="lang-bar"><div class="lang-fill" data-width="100%"></div></div>
+          <span class="lang-level">Bản ngữ</span>
+        </div>
+        <div class="lang-row">
+          <span class="lang-name">Tiếng Anh</span>
+          <div class="lang-bar"><div class="lang-fill" data-width="75%"></div></div>
+          <span class="lang-level">B2 (đang học)</span>
+        </div>
+        <div class="lang-row">
+          <span class="lang-name">[Ngôn ngữ khác]</span>
+          <div class="lang-bar"><div class="lang-fill" data-width="30%"></div></div>
+          <span class="lang-level">Cơ bản</span>
+        </div>
+
+        <div class="skills-heading" style="margin-top: 1.5rem;">Kỹ năng</div>
+
+        <div class="skill-group">
+          <div class="skill-group-label">Pháp lý</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Nghiên cứu pháp luật</span>
+            <span class="skill-tag">Soạn thảo văn bản</span>
+            <span class="skill-tag">Phân tích hợp đồng</span>
+            <span class="skill-tag">Tư vấn pháp lý cơ bản</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-label">Quản trị</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Lập kế hoạch kinh doanh</span>
+            <span class="skill-tag">Phân tích dữ liệu</span>
+            <span class="skill-tag">Làm việc nhóm</span>
+            <span class="skill-tag">Quản lý dự án</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-label">Công cụ</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Microsoft Office</span>
+            <span class="skill-tag">Excel / Google Sheets</span>
+            <span class="skill-tag">Canva</span>
+            <span class="skill-tag">[Thêm công cụ]</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- JOURNEY -->
+<section class="section-full" id="journey" style="background: white;">
+  <div class="section-inner">
+    <span class="section-label">Hành trình đại học</span>
+    <h2 class="section-title">5 năm — <em>học, trải nghiệm,<br>và tự hiểu mình hơn</em></h2>
+    <p class="section-sub">Đại học Luật TP.HCM · 2020 – 2025 · Song ngành Quản trị Kinh doanh &amp; Luật</p>
+
+    <div class="journey-layout">
+      <div class="journey-nav">
+        <a class="journey-nav-item active" href="#proj">Dự án &amp; Bài tập lớn</a>
+        <a class="journey-nav-item" href="#clubs">Câu lạc bộ &amp; Hoạt động</a>
+        <a class="journey-nav-item" href="#reflection">Cảm nhận sau 5 năm</a>
+      </div>
+
+      <div class="journey-content">
+
+        <div class="journey-block reveal" id="proj">
+          <div class="journey-year">Dự án &amp; Bài tập lớn</div>
+          <h3 class="journey-block-title">Những thứ mình đã làm trên giảng đường</h3>
+          <p class="journey-block-body">
+            Từ phân tích hợp đồng đến lập kế hoạch kinh doanh — mỗi bài tập lớn là một lần mình tập nghĩ thật, không chỉ nghĩ để qua môn.
+          </p>
+
+          <div class="project-cards">
+            <div class="project-card reveal reveal-delay-1">
+              <span class="project-tag">Luật Kinh doanh</span>
+              <div class="project-name">[Tên dự án / đề tài 1]</div>
+              <div class="project-desc">Mô tả ngắn về dự án, phương pháp thực hiện và điều bạn học được.</div>
+            </div>
+            <div class="project-card reveal reveal-delay-2">
+              <span class="project-tag">Quản trị</span>
+              <div class="project-name">[Tên dự án / đề tài 2]</div>
+              <div class="project-desc">Mô tả ngắn về dự án, phương pháp thực hiện và điều bạn học được.</div>
+            </div>
+            <div class="project-card reveal reveal-delay-3">
+              <span class="project-tag">Nghiên cứu</span>
+              <div class="project-name">[Tên bài nghiên cứu / báo cáo]</div>
+              <div class="project-desc">Mô tả ngắn về chủ đề và đóng góp của bạn trong nhóm.</div>
+            </div>
+            <div class="project-card reveal reveal-delay-4">
+              <span class="project-tag">Thực hành</span>
+              <div class="project-name">[Tên dự án / tình huống thực tế]</div>
+              <div class="project-desc">Mô tả ngắn. Kết quả hoặc bài học rút ra từ dự án này.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="journey-block reveal" id="clubs">
+          <div class="journey-year">Câu lạc bộ &amp; Hoạt động</div>
+          <h3 class="journey-block-title">Những nơi mình thuộc về</h3>
+          <p class="journey-block-body">
+            Hoạt động ngoài giờ học là nơi mình hiểu mình thích làm gì — không phải từ lý thuyết, mà từ việc thực sự làm và sai, rồi sửa.
+          </p>
+
+          <div class="club-list">
+            <div class="club-item"><span class="club-dot"></span>[Tên CLB / đội nhóm 1]</div>
+            <div class="club-item"><span class="club-dot"></span>[Tên CLB / đội nhóm 2]</div>
+            <div class="club-item"><span class="club-dot"></span>[Cuộc thi / sự kiện 1]</div>
+            <div class="club-item"><span class="club-dot"></span>[Tình nguyện / dự án cộng đồng]</div>
+            <div class="club-item"><span class="club-dot"></span>[Hoạt động khác]</div>
+          </div>
+        </div>
+
+        <div class="journey-block reveal" id="reflection">
+          <div class="journey-year">Cảm nhận sau 5 năm</div>
+          <h3 class="journey-block-title">Mình đã học gì — ngoài giáo trình</h3>
+          <p class="journey-block-body">
+            Đây là nơi bạn có thể kể một câu chuyện thật sự của mình — không cần formal, không cần perfect.
+          </p>
+          <div class="reflection-box">
+            <p class="reflection-text">
+              "5 năm đại học không dạy mình câu trả lời. Nó dạy mình cách đặt câu hỏi tốt hơn — và nhận ra rằng, đôi khi không chắc không phải là điểm yếu, mà là điểm bắt đầu của sự trung thực."
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- WORK -->
+<section id="work">
+  <span class="section-label">Kinh nghiệm thực tế</span>
+  <h2 class="section-title">Những lần mình <em>thực sự làm việc</em></h2>
+  <p class="section-sub">Internship, part-time, hay bất kỳ dự án nào bên ngoài trường — nơi mình đem lý thuyết ra kiểm chứng.</p>
+
+  <div class="work-list">
+    <div class="work-card reveal">
+      <div class="work-left">
+        <div class="work-period">T[X] / 20XX – T[X] / 20XX</div>
+        <div class="work-company">[Tên công ty / tổ chức]</div>
+      </div>
+      <div class="work-right">
+        <div class="work-role">[Vị trí / vai trò]</div>
+        <span class="work-type">Thực tập / Part-time / Freelance</span>
+        <p class="work-desc">
+          Mô tả những gì bạn thực sự làm — không cần văn hoa. Bạn đã hỗ trợ gì? Học được gì? Có kết quả cụ thể nào không?
+        </p>
+        <div class="work-tags">
+          <span class="work-tag">[Kỹ năng áp dụng]</span>
+          <span class="work-tag">[Lĩnh vực]</span>
+          <span class="work-tag">[Công cụ dùng]</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-card reveal reveal-delay-1">
+      <div class="work-left">
+        <div class="work-period">T[X] / 20XX – T[X] / 20XX</div>
+        <div class="work-company">[Tên công ty / tổ chức]</div>
+      </div>
+      <div class="work-right">
+        <div class="work-role">[Vị trí / vai trò]</div>
+        <span class="work-type">Thực tập / Part-time / Freelance</span>
+        <p class="work-desc">
+          Mô tả công việc cụ thể. Bạn chịu trách nhiệm gì? Điều gì thách thức và bạn đã xử lý ra sao?
+        </p>
+        <div class="work-tags">
+          <span class="work-tag">[Kỹ năng áp dụng]</span>
+          <span class="work-tag">[Lĩnh vực]</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-card reveal reveal-delay-2">
+      <div class="work-left">
+        <div class="work-period">T[X] / 20XX – nay</div>
+        <div class="work-company">[Tên dự án cá nhân]</div>
+      </div>
+      <div class="work-right">
+        <div class="work-role">[Vai trò]</div>
+        <span class="work-type">Dự án cá nhân</span>
+        <p class="work-desc">
+          Nếu bạn có bất kỳ dự án tự làm nào — dù nhỏ — cũng nên kể ở đây. Nó cho thấy bạn chủ động và có initiative.
+        </p>
+        <div class="work-tags">
+          <span class="work-tag">[Kỹ năng]</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- INTERESTS (NEW) -->
+<section class="interests-section" id="interests">
+  <span class="section-label">Ngoài giờ học</span>
+  <h2 class="section-title">Những điều <em>mình quan tâm</em></h2>
+  <p class="section-sub">Một người không chỉ là nghề nghiệp. Đây là những thứ ngoài lớp học định hình cách mình nghĩ và cảm nhận.</p>
+
+  <div class="interests-grid">
+    <div class="interest-card reveal">
+      <span class="interest-icon">⚖️</span>
+      <div class="interest-title">Triết học pháp lý</div>
+      <div class="interest-desc">  .</div> #ghi vào đây nội dung sau
+    </div>
+    <div class="interest-card reveal reveal-delay-1">
+      <span class="interest-icon">📚</span>
+      <div class="interest-title">Đọc sách</div>
+      <div class="interest-desc"> </div>
+    </div>
+    <div class="interest-card reveal reveal-delay-2">
+      <span class="interest-icon">💬</span>
+      <div class="interest-title">Những cuộc trò chuyện sâu</div>
+      <div class="interest-desc"> .</div>
+    </div>
+    <div class="interest-card reveal reveal-delay-1">
+      <span class="interest-icon">🌏</span>
+      <div class="interest-title">Văn hoá &amp; Xã hội</div>
+      <div class="interest-desc">Hiểu tại sao mỗi nơi có cách nghĩ và sống khác nhau — đó là một trong những thứ mình thấy hấp dẫn nhất.</div>
+    </div>
+    <div class="interest-card reveal reveal-delay-2">
+      <span class="interest-icon">✍️</span>
+      <div class="interest-title">Viết lách</div>
+      <div class="interest-desc"> .</div>
+    </div>
+    <div class="interest-card reveal reveal-delay-3">
+      <span class="interest-icon">🎵</span>
+      <div class="interest-title">Gu nhạc</div>
+      <div class="interest-desc"> </div>
+    </div>
+  </div>
+</section>
+
+<!-- sách yêu thích -->
+<div class="books-section">
+  <div class="books-inner">
+    <span class="section-label">Đang đọc &amp; đã đọc</span>
+    <h2 class="section-title" style="margin-bottom: 0.5rem;">Tủ sách <em>của mình</em></h2>
+  </div>
+  <div class="books-marquee-wrapper" style="margin-top: 2rem;">
+    <div class="books-marquee" id="marquee">
+      <div class="book-item"><span class="book-emoji">📖</span><span class="book-title">Sapiens</span><span class="book-author">Yuval Noah Harari</span></div>
+      <div class="book-item"><span class="book-emoji">📖</span><span class="book-title">Thinking, Fast and Slow</span><span class="book-author">Daniel Kahneman</span></div>
+      <div class="book-item"><span class="book-emoji">📖</span><span class="book-title">Atomic Habits</span><span class="book-author">James Clear</span></div>
+      <div class="book-item"><span class="book-emoji">📖</span><span class="book-title">Đắc Nhân Tâm</span><span class="book-author">Dale Carnegie</span></div>
+      <div class="book-item"><span class="book-emoji">📖</span><span class="book-title">The Psychology of Money</span><span class="book-author">Morgan Housel</span></div>
+      <div class="book-item"><span class="book-emoji">📖</span><span class="book-title">Deep Work</span><span class="book-author">Cal Newport</span></div>
+      <div class="book-item"><span class="book-emoji">📖</span><span class="book-title">[Sách pháp lý yêu thích]</span><span class="book-author">[Tác giả]</span></div>
+      <div class="book-item"><span class="book-emoji">📖</span><span class="book-title">The Lean Startup</span><span class="book-author">Eric Ries</span></div>
+      <!-- loop -->
+      <div class="book-item"><span class="book-emoji">📖</span><span class="book-title">Sapiens</span><span class="book-author">Yuval Noah Harari</span></div>
+      <div class="book-item"><span class="book-emoji">📖</span><span class="book-title">Thinking, Fast and Slow</span><span class="book-author">Daniel Kahneman</span></div>
+      <div class="book-item"><span class="book-emoji">📖</span><span class="book-title">Atomic Habits</span><span class="book-author">James Clear</span></div>
+      <div class="book-item"><span class="book-emoji">📖</span><span class="book-title">Đắc Nhân Tâm</span><span class="book-author">Dale Carnegie</span></div>
+      <div class="book-item"><span class="book-emoji">📖</span><span class="book-title">The Psychology of Money</span><span class="book-author">Morgan Housel</span></div>
+      <div class="book-item"><span class="book-emoji">📖</span><span class="book-title">Deep Work</span><span class="book-author">Cal Newport</span></div>
+      <div class="book-item"><span class="book-emoji">📖</span><span class="book-title">[Sách pháp lý yêu thích]</span><span class="book-author">[Tác giả]</span></div>
+      <div class="book-item"><span class="book-emoji">📖</span><span class="book-title">The Lean Startup</span><span class="book-author">Eric Ries</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <span class="section-label">Liên hệ</span>
+  <h2 class="section-title">Hãy <em>kết nối</em> với mình</h2>
+  <p class="section-sub">Nếu bạn có bất kỳ cơ hội, câu hỏi, hay chỉ muốn trò chuyện - mình rất vui được nghe từ bạn.</p>
+
+  <div class="availability-banner reveal">
+    <div class="avail-dot"></div>
+    <div class="avail-text"><strong>Hãy liên hệ với Trâm bằng gmail này nhé </strong> </div>
+  </div>
+
+  <div class="contact-cards">
+  
+    <a href="https://mail.google.com/mail/u/0/?fs=1&tf=cm&source=mailto&to=minhtram.1202@gmail.com" class="contact-card reveal">
+      <div class="contact-icon-large">✉</div>
+      <div class="contact-card-title">Email</div>
+      <div class="contact-card-link">minhtram.1202@gmail.com</div>
+    </a>
+    
+  </div>
+  
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">Minh Trâm · <span style="color: var(--amber);">♒</span></div>
+  <div class="footer-note">Cập nhật 04/2025 · Made with care</div>
+  <a href="#hero" class="back-to-top" title="Lên đầu trang">↑</a>
+</footer>
+
+<script>
+  // ── CUSTOM CURSOR
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mouseX = 0, mouseY = 0;
+  let ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+  });
+
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
+    ring.style.left = ringX + 'px';
+    ring.style.top = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // ── READING PROGRESS
+  const progress = document.getElementById('reading-progress');
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progress.style.width = pct + '%';
+  });
+
+  // ── NAV SCROLL EFFECT
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // ── SCROLL REVEAL
+  const revealEls = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        // Trigger lang bars if inside
+        e.target.querySelectorAll('.lang-fill[data-width]').forEach(bar => {
+          bar.style.width = bar.dataset.width;
+        });
+      }
+    });
+  }, { threshold: 0.15 });
+
+  revealEls.forEach(el => revealObserver.observe(el));
+
+  // Also trigger lang bars on scroll globally
+  const langObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.lang-fill[data-width]').forEach(bar => {
+          bar.style.width = bar.dataset.width;
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.about-right').forEach(el => langObserver.observe(el));
+
+  // ── COUNTER ANIMATION
+  function animateCounter(el, target) {
+    let current = 0;
+    const duration = 1500;
+    const step = target / (duration / 16);
+    const suffix = el.querySelector('span').textContent;
+    const interval = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.childNodes[0].textContent = Math.floor(current);
+      if (current >= target) clearInterval(interval);
+    }, 16);
+  }
+
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const num = e.target.querySelector('.stat-number');
+        if (num && num.dataset.target) {
+          animateCounter(num, parseInt(num.dataset.target));
+          statsObserver.unobserve(e.target);
+        }
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.stat-item').forEach(el => statsObserver.observe(el));
+
+  // ── JOURNEY NAV ACTIVE STATE
+  const journeyItems = document.querySelectorAll('.journey-nav-item');
+  const journeyBlocks = document.querySelectorAll('.journey-block');
+
+  const journeyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        journeyItems.forEach(item => {
+          item.classList.toggle('active', item.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.5, rootMargin: '-100px 0px -40% 0px' });
+  journeyBlocks.forEach(b => journeyObserver.observe(b));
+
+  // ── SMOOTH CURSOR disable on mobile
+  if ('ontouchstart' in window) {
+    document.body.style.cursor = 'auto';
+  }
+</script>
+</body>
+</html>
